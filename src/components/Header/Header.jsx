@@ -1,41 +1,70 @@
+import { ethers } from "ethers";
+
+
+import { useEffect, useState } from "react";
 import { ConectedWalletBtn, Logo, StyledHeader } from "./HeaderStyled";
 
-import Web3Modal from "web3modal";
-import { ethers } from "ethers";
-// import { CoinbaseWalletSDK } from "@coinbase/wallet-sdk";
-
-const providerOptions = {
-  // coinbasewallet: {
-  //   package: CoinbaseWalletSDK,
-  //   options: {
-  //     appName: "my-wallet-app",
-  //     infuard: { 3: "https://ropsten.infura.io/v3/fefnefnesfe" },
-  //   },
-  // },
-};
 
 export const Header = () => {
+  const [walletAddress, setWalletAddress] = useState(null);
+  const [userBalance, setUserBalance ] = useState(null)
+  useEffect(() => {
+    getCurrentWalletConnected();
+    addWalletListener();
+  }, [walletAddress]);
+
   const ConectionWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       try {
-        const accounts = await window.ethereum.request({method: "eth_requestAccounts"});
-        console.log(accounts[0]);
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const balance = await window.ethereum.request({
+          method: "eth_getBalance", params: [accounts[0], "latest"]
+        })
+        setWalletAddress(accounts[0]);
+        const fixedBalance = parseInt(ethers.formatEther(balance))
+        setUserBalance(fixedBalance.toFixed(3))
+        console.log(fixedBalance.toFixed(3));
       } catch (error) {
         console.log(error);
       }
-      // try {
-      //   let web3Modal = new Web3Modal({
-      //     cacheProvider: false,
-      //     providerOptions,
-      //   }); 
-      //   const web3ModalInstance = await web3Modal.connect();
-      //   const web3modalProvider = new ethers.BrowserProvider(web3ModalInstance);
-      //   console.log(web3modalProvider);
-      // } catch (error) {
-      //   console.log(error);
-      // }
     } else {
-      alert("Please install MetaMask")
+      alert("Please install MetaMask");
+    }
+  };
+
+  const getCurrentWalletConnected = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_accounts",
+        });
+        if (accounts.length > 0) {
+          const balance = await window.ethereum.request({
+            method: "eth_getBalance", params: [accounts[0], "latest"]
+          })
+          setWalletAddress(accounts[0]);
+          setUserBalance(ethers.formatEther(balance))
+        } else {
+          console.log("Connect to MetaMask using the Connect button");
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      alert("Please install MetaMask");
+    }
+  };
+
+  const addWalletListener = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      window.ethereum.on("accountsChanged", (accounts) => {
+        setWalletAddress(accounts[0]);
+      });
+    } else {
+      setWalletAddress("");
+      alert("Please install MetaMask");
     }
   };
 
@@ -44,7 +73,12 @@ export const Header = () => {
       <StyledHeader>
         <Logo>YOUR WALLET</Logo>
         <ConectedWalletBtn onClick={ConectionWallet}>
-          Connect wallet
+        {walletAddress && walletAddress.length > 0
+                    ? `${userBalance ? userBalance: 0.0}: ${walletAddress.substring(
+                        0,
+                        5
+                      )}...${walletAddress.substring(38)}`
+                    : "Connect Wallet"}
         </ConectedWalletBtn>
       </StyledHeader>
     </>
