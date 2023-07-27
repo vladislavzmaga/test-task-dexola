@@ -2,25 +2,24 @@ import PropTypes from "prop-types";
 
 import { FormBtn, FormInput, FormWrapper } from "./Form.styled";
 
-export const Form = ({ harvestingFields }) => {
-  
-
- 
-
+export const Form = ({ harvestingFields}) => {
   const hendlerSubmit = (evt) => {
     evt.preventDefault();
     const recipient = evt.target.recipient.value;
     const amount = evt.target.amount.value;
-    harvestingFields( recipient, amount)
-    evt.target.reset()
+    harvestingFields(recipient, amount);
+    evt.target.reset();
   };
 
   return (
     <>
       <FormWrapper onSubmit={hendlerSubmit}>
-        <FormInput placeholder="enter the wallet address" name="recipient" ></FormInput>
-        <FormInput placeholder="enter the amount" name="amount" ></FormInput>
-        <FormBtn type="submit">send</FormBtn>
+        <FormInput
+          placeholder="enter the wallet address"
+          name="recipient"
+        ></FormInput>
+        <FormInput placeholder="enter the amount" name="amount"></FormInput>
+          <FormBtn type="submit"><span>send</span></FormBtn>
       </FormWrapper>
     </>
   );

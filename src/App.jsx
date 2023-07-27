@@ -70,6 +70,7 @@ function App() {
   };
 
   const sendEther = async (recipient, amount) => {
+    
     let params = [
       {
         from: `${walletAddress}`,
@@ -79,15 +80,12 @@ function App() {
         value: Number(amount * 1000000000000000000).toString(16),
       },
     ];
-
-    console.log(params);
-
     try {
-      const result = await window.ethereum.request({
+      await window.ethereum.request({
         method: "eth_sendTransaction",
         params,
       });
-      console.log(result);
+      alert('operation success')
     } catch (error) {
       alert(error.message);
     }
@@ -102,7 +100,10 @@ function App() {
         addWalletListener={addWalletListener}
         getCurrentWalletConnected={getCurrentWalletConnected}
       />
-      <Form harvestingFields={harvestingFields} walletAddress={walletAddress} />
+      <Form
+        harvestingFields={harvestingFields}
+        walletAddress={walletAddress}
+      />
       <RepoLink
         href="https://github.com/vladislavzmaga/test-task-dexola"
         target="blank"
