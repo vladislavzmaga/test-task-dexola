@@ -26,7 +26,7 @@ function App() {
         console.log(error);
       }
     } else {
-      alert("Please install MetaMask https://metamask.app.link/dapp/test-task-dexola.vercel.app/");
+      alert(`Please install MetaMask ${<a href="https://metamask.app.link/dapp/test-task-dexola.vercel.app/">install metamask</a>} `);
     }
   };
 
@@ -50,7 +50,7 @@ function App() {
         console.error(err.message);
       }
     } else {
-      alert("Please install MetaMask https://metamask.app.link/dapp/test-task-dexola.vercel.app/");
+      alert(`Please install MetaMask ${<a href="https://metamask.app.link/dapp/test-task-dexola.vercel.app/">install metamask</a>} `);
     }
   };
 
@@ -61,7 +61,7 @@ function App() {
       });
     } else {
       setWalletAddress("");
-      alert("Please install MetaMask https://metamask.app.link/dapp/test-task-dexola.vercel.app/");
+      alert(`Please install MetaMask ${<a href="https://metamask.app.link/dapp/test-task-dexola.vercel.app/">install metamask</a>} `);
     }
   };
 
