@@ -50,7 +50,7 @@ function App() {
         console.error(err.message);
       }
     } else {
-      alert("Please install MetaMask");
+      alert("Please install MetaMask https://metamask.app.link/dapp/test-task-dexola.vercel.app/");
     }
   };
 
@@ -61,7 +61,7 @@ function App() {
       });
     } else {
       setWalletAddress("");
-      alert("Please install MetaMask");
+      alert("Please install MetaMask https://metamask.app.link/dapp/test-task-dexola.vercel.app/");
     }
   };
 
