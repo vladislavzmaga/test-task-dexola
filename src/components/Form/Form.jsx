@@ -20,7 +20,7 @@ export const Form = ({ harvestingFields }) => {
       <FormWrapper onSubmit={hendlerSubmit}>
         <FormInput placeholder="enter the wallet address" name="recipient" ></FormInput>
         <FormInput placeholder="enter the amount" name="amount" ></FormInput>
-        <FormBtn type="submit">submit</FormBtn>
+        <FormBtn type="submit">send</FormBtn>
       </FormWrapper>
     </>
   );
