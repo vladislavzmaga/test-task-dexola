@@ -10,48 +10,25 @@ function App() {
   const [walletAddress, setWalletAddress] = useState(null);
   const [userBalance, setUserBalance] = useState(null);
 
-  if (window.ethereum) {
-    handleEthereum();
-  } else {
-    window.addEventListener('ethereum#initialized', handleEthereum, {
-      once: true,
-    });
-  
-    // If the event is not dispatched by the end of the timeout,
-    // the user probably doesn't have MetaMask installed.
-    setTimeout(handleEthereum, 3000); // 3 seconds
-  }
-  
-  function handleEthereum() {
-    const { ethereum } = window;
-    if (ethereum && ethereum.isMetaMask) {
-      alert('Ethereum successfully detected!');
-      // Access the decentralized web!
+  const conectionWallet = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const balance = await window.ethereum.request({
+          method: "eth_getBalance",
+          params: [accounts[0], "latest"],
+        });
+        setWalletAddress(accounts[0]);
+        setUserBalance(ethers.formatEther(balance));
+      } catch (error) {
+        console.log(error);
+      }
     } else {
-      alert('Please install MetaMask!');
+      alert("Please install MetaMask https://metamask.app.link/dapp/test-task-dexola.vercel.app/");
     }
-  }
-  // const conectionWallet = async () => {
-  //   if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-  //     try {
-  //       const accounts = await window.ethereum.request({
-  //         method: "eth_requestAccounts",
-  //       });
-  //       const balance = await window.ethereum.request({
-  //         method: "eth_getBalance",
-  //         params: [accounts[0], "latest"],
-  //       });
-  //       setWalletAddress(accounts[0]);
-  //       setUserBalance(ethers.formatEther(balance));
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   } else {
-  //     window.addEventListener('ethereum#initialized', handleEthereum, {
-  //       once: true,
-  //     });
-  //   }
-  // };
+  };
 
   const getCurrentWalletConnected = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
