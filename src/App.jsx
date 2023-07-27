@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ethers } from "ethers";
-import detectEthereumProvider from '@metamask/detect-provider'
 
 import "./App.css";
 import { RepoLink } from "./App.styled";
@@ -8,18 +7,10 @@ import { Form } from "./components/Form/Form";
 import { Header } from "./components/Header/Header";
 
 function App() {
-  const [hasProvider, setHasProvider] = useState(null)
   const [walletAddress, setWalletAddress] = useState(null);
   const [userBalance, setUserBalance] = useState(null);
-
-  useEffect(() => {
-    const getProvider = async () => {
-      const provider = await detectEthereumProvider({ silent: true })
-      setHasProvider(Boolean(provider))
-    }
-
-    getProvider()
-  }, [])
+  // const [recipient, setRecipient] = useState("");
+  // const [amount, setAmount] = useState("");
 
   const conectionWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
@@ -76,6 +67,34 @@ function App() {
     }
   };
 
+  const harvestingFields = (recipient, amount) => {
+    sendEther(recipient, amount);
+  };
+
+  const sendEther = async (recipient, amount) => {
+    let params = [
+      {
+        from: `${walletAddress}`,
+        to: `${recipient}`,
+        gasLimit: Number(21000).toString(16),
+        gasPrice: Number(2500000).toString(16),
+        value: Number(amount * 1000000000000000000).toString(16),
+      },
+    ];
+
+    console.log(params);
+
+    try {
+      const result = await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params,
+      });
+      console.log(result);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <>
       <Header
@@ -85,7 +104,7 @@ function App() {
         addWalletListener={addWalletListener}
         getCurrentWalletConnected={getCurrentWalletConnected}
       />
-      <Form />
+      <Form harvestingFields={harvestingFields} walletAddress={walletAddress} />
       <RepoLink
         href="https://github.com/vladislavzmaga/test-task-dexola"
         target="blank"
